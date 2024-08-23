@@ -1,6 +1,6 @@
 [//]: # (<p align="center">)
 
-[//]: # (  <img alt="Super Liquid Galaxy Controller" src="https://raw.githubusercontent.com/AritraBiswas9788/Public-Assets/main/SLGC%20logo%20with%20title.png" height="250px">)
+  <img alt="AIS" src="https://raw.githubusercontent.com/AritraBiswas9788/OilGuard/master/assets/app_banner.png" height="250px">
 
 [//]: # (</p>  )
 
