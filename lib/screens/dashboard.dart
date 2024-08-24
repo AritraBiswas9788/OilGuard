@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:oil_guard/generated/assets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:oil_guard/utils/ais_data_fetcher.dart';
+import 'package:get/get.dart';
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -10,10 +12,19 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late GoogleMapController _mapController;
+  late AisDataFetcher aisDataFetcher;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+
+  @override
+  void initState() {
+    aisDataFetcher = Get.find();
+    aisDataFetcher.connectSocket();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(

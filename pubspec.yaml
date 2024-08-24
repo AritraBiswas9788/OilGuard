@@ -51,6 +51,7 @@ dev_dependencies:
   google_maps_flutter_web: ^0.5.10
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter_platform_interface: ^2.9.0
+  web_socket_client: ^0.1.4
 
 
 # For information on the generic Dart part of this file, see the

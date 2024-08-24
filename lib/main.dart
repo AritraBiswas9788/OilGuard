@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:oil_guard/screens/dashboard.dart';
 import 'package:oil_guard/screens/splash_screens.dart';
+import 'package:oil_guard/utils/ais_data_fetcher.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   //Lazy Initialize GetX controllers
+  Get.lazyPut(()=>AisDataFetcher(),fenix: true);
 
   SystemChrome.setPreferredOrientations([
     // Lock orientation to landscape

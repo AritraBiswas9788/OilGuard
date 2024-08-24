@@ -1,3 +1,4 @@
+
 class AisData {
   Message? message;
   String? messageType;
@@ -96,7 +97,7 @@ class PositionReport {
   int? specialManoeuvreIndicator;
   int? timestamp;
   int? trueHeading;
-  int? userId;
+  String? userId;
   bool? valid;
 
   PositionReport({this.cog, this.communicationState, this.latitude, this.longitude, this.messageId, this.navigationalStatus, this.positionAccuracy, this.raim, this.rateOfTurn, this.repeatIndicator, this.sog, this.spare, this.specialManoeuvreIndicator, this.timestamp, this.trueHeading, this.userId, this.valid});
@@ -132,8 +133,7 @@ class PositionReport {
       this.timestamp = json["Timestamp"];
     if(json["TrueHeading"] is int)
       this.trueHeading = json["TrueHeading"];
-    if(json["UserID"] is int)
-      this.userId = json["UserID"];
+      this.userId = json["UserID"].toString();
     if(json["Valid"] is bool)
       this.valid = json["Valid"];
   }
