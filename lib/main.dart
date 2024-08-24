@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:oil_guard/screens/dashboard.dart';
 import 'package:oil_guard/screens/splash_screens.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashScreen(), // Root route
+        '/': (context) => const Dashboard(), // Root route
         // Settings route
       },
       theme: ThemeData(
