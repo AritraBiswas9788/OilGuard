@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:oil_guard/screens/dashboard.dart';
 import 'package:oil_guard/screens/splash_screens.dart';
+import 'package:oil_guard/utils/ais_data_fetcher.dart';
 //import 'package:oil_guard/utils/ais_data_fetcher.dart';
 
 import 'firebase_options.dart';
@@ -14,7 +15,7 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   //Lazy Initialize GetX controllers
-  //Get.lazyPut(()=>AisDataFetcher(),fenix: false);
+  Get.lazyPut(()=>AisDataFetcher(),fenix: false);
   SystemChrome.setPreferredOrientations([
     // Lock orientation to landscape
     DeviceOrientation.landscapeRight,

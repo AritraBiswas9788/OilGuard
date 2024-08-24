@@ -6,6 +6,9 @@ import 'package:oil_guard/components/vessel_tracking.dart';
 import 'package:oil_guard/constants/my_colors.dart';
 import 'package:oil_guard/generated/assets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart';
+
+import '../utils/ais_data_fetcher.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -16,6 +19,15 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late GoogleMapController _mapController;
+  late AisDataFetcher aisDataFetcher;
+
+  @override
+  void initState() {
+    aisDataFetcher = Get.find();
+    aisDataFetcher.connectSocket();
+    super.initState();
+  }
+
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
