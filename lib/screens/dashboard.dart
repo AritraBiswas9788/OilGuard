@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oil_guard/components/MapElement.dart';
 import 'package:oil_guard/components/alert_system.dart';
 import 'package:oil_guard/components/collision_prediction.dart';
 import 'package:oil_guard/components/home.dart';
@@ -22,11 +23,15 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   late GoogleMapController _mapController;
   late AisDataFetcher aisDataFetcher;
+  DataHandler dataHandler = DataHandler();
+
+
 
   @override
   void initState() {
     aisDataFetcher = Get.find();
     aisDataFetcher.connectSocket();
+    //setNewData();
     super.initState();
   }
 
@@ -50,13 +55,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  // double screenWidth = 0;
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   screenWidth = MediaQuery.of(context).size.width;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +144,13 @@ class _DashboardState extends State<Dashboard> {
               //   onTap: _toggleRightSidebar,
               // ),
               Expanded(
-                child: GoogleMap(
-                  mapType: MapType.hybrid,
-                  initialCameraPosition: _kGooglePlex,
-                  onMapCreated: _onMapCreated,
-                ),
+                child: MapElement(
+                  onMapReady: _onMapCreated,
+                  handlerCallback: (handler){
+                    dataHandler = handler;
+                    aisDataFetcher.setDataHandler(handler);
+                  },
+                )
               ),
               Transform.translate(
                 offset: const Offset(-30, 0),
@@ -205,7 +205,7 @@ class _DashboardState extends State<Dashboard> {
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-    addKml(_mapController);
+    //addKml(_mapController);
   }
 
   static Future<void> addKml(GoogleMapController mapController) async {
@@ -213,8 +213,57 @@ class _DashboardState extends State<Dashboard> {
     var mapId = mapController.mapId;
     const MethodChannel channel = MethodChannel('flutter.native/helper');
     final MethodChannel kmlchannel = MethodChannel('plugins.flutter.dev/google_maps_android_${mapId}');
+    String kml = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Untitled Polygon.kml</name>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Placemark>
+		<name>Untitled Polygon</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Polygon>
+			<tessellate>1</tessellate>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						1.968789847662598,1.032332438054204,0 2.030775501330602,0.9726693528318184,0 8.046913954073355,6.979662875552394,0 7.966524661513443,7.029284663505754,0 1.968789847662598,1.032332438054204,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>
+''';
     try {
-      int kmlResourceId = await channel.invokeMethod('map#addKML');
+      int kmlResourceId = await channel.invokeMethod('map#addKML',kml);
 
       var c = kmlchannel.invokeMethod("map#addKML", <String, dynamic>{
         'resourceId': kmlResourceId,
@@ -226,5 +275,10 @@ class _DashboardState extends State<Dashboard> {
       print("error");
       throw 'Unable to plot map${e}';
     }
+  }
+
+  void setNewData() async {
+    await Future.delayed(Duration(seconds: 3));
+    dataHandler.setNewPolygons!([[LatLng(25, -90),LatLng(26, 80),LatLng(23, 85)]]);
   }
 }

@@ -11,7 +11,7 @@
 * [Aryan Rawat](https://github.com/RAry-n)
 * [Sakshi Agrawal](https://github.com/sakshi04agrawal)
 * [Anjana Gupta](https://github.com/Anjana78Gupta)
-* [Kritika Mangalam](https://github.com/AritraBiswas9788)
+* [Kritika Manglam](https://github.com/Kritika-Manglam)
 
 
 [//]: # (<h2 align="center">Scan the QR code to Install the Application<h2>)
