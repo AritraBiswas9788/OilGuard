@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:oil_guard/components/alert_system.dart';
 import 'package:oil_guard/components/collision_prediction.dart';
 import 'package:oil_guard/components/home.dart';
@@ -199,6 +200,27 @@ class _DashboardState extends State<Dashboard> {
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    addKml(_mapController);
+  }
+
+  static Future<void> addKml(GoogleMapController mapController) async {
+    print('addKml');
+    var mapId = mapController.mapId;
+    const MethodChannel channel = MethodChannel('flutter.native/helper');
+    final MethodChannel kmlchannel = MethodChannel('plugins.flutter.dev/google_maps_android_${mapId}');
+    try {
+      int kmlResourceId = await channel.invokeMethod('map#addKML');
+
+      var c = kmlchannel.invokeMethod("map#addKML", <String, dynamic>{
+        'resourceId': kmlResourceId,
+      });
+      print('addKml done${c}');
+    } on PlatformException catch (e) {
+      throw 'Unable to plot map: ${e.message}';
+    }catch(e){
+      print("error");
+      throw 'Unable to plot map${e}';
+    }
   }
 
   Widget _buildCollapsedRightSidebar() {
