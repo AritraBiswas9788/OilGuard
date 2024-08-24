@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../constants/my_colors.dart';
 
 class AlertSystem extends StatefulWidget {
@@ -10,7 +9,6 @@ class AlertSystem extends StatefulWidget {
 }
 
 class _AlertSystemState extends State<AlertSystem> {
-
   @override
   Widget build(BuildContext context) {
     final pastCollisions = [
@@ -20,23 +18,32 @@ class _AlertSystemState extends State<AlertSystem> {
 
     final upcomingCollisions = [
       {'date': '2024-09-15', 'location': '......', 'details': 'Potential collision with vessel A'},
-      {'date': '024-09-15', 'location': '.....', 'details': 'Potential collision with vessel B'},
+      {'date': '2024-09-15', 'location': '.....', 'details': 'Potential collision with vessel B'},
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Collision Reports',style: TextStyle(color: Colors.white,fontSize: 18,
-          fontWeight: FontWeight.bold,)),
-      backgroundColor: MyColors.primary,
-    ),
+        centerTitle: true,
+        title: const Text(
+          'COLLISION REPORTS',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: MyColors.primary,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Past Collisions',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Center(
+              child: const Text(
+                'Past Collisions',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -46,18 +53,27 @@ class _AlertSystemState extends State<AlertSystem> {
                   final collision = pastCollisions[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: ListTile(
-                      title: Text('${collision['date']} - ${collision['location']}'),
-                      subtitle: Text(collision['details']!),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Date: ${collision['date']}'),
+                          Text('Location: ${collision['location']}'),
+                          Text('Details: ${collision['details']}'),
+                        ],
+                      ),
                     ),
                   );
                 },
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Upcoming Collisions',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Center(
+              child: const Text(
+                'Upcoming Collisions',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -67,9 +83,16 @@ class _AlertSystemState extends State<AlertSystem> {
                   final collision = upcomingCollisions[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: ListTile(
-                      title: Text('${collision['date']} - ${collision['location']}'),
-                      subtitle: Text(collision['details']!),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Date: ${collision['date']}'),
+                          Text('Location: ${collision['location']}'),
+                          Text('Details: ${collision['details']}'),
+                        ],
+                      ),
                     ),
                   );
                 },

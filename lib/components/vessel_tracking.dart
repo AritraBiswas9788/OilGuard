@@ -9,15 +9,20 @@ class VesselTracking extends StatefulWidget {
 }
 
 class _VesselTrackingState extends State<VesselTracking> {
+  Future<String> _fetchCollisionStatus() async {
+    await Future.delayed(const Duration(seconds: 2));
+    return 'Collision Possible';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
-          'Vessel Tracking',
+          'VESSEL TRACKING',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -30,37 +35,53 @@ class _VesselTrackingState extends State<VesselTracking> {
           _buildElevatedSection(
             title: 'Navigation Details',
             items: [
-              'Speed Over Ground: 0 knots',
-              'Course Over Ground: 267.6°',
-              'Navigation Status: Underway',
-              'Rate of Turn: -128°/min',
-              'Last Known Position: Latitude 29.7953, Longitude -93.9492',
+              _buildItem('Speed Over Ground:', '0 knots'),
+              _buildItem('Course Over Ground:', '267.6°'),
+              _buildItem('Navigation Status:', 'Underway'),
+              _buildItem('Rate of Turn:', '-128°/min'),
+              _buildItem('Last Known Position:', 'Latitude 29.7953, Longitude -93.9492'),
             ],
           ),
           _buildElevatedSection(
             title: 'Vessel Characteristics',
             items: [
-              'Ship Name: WECK DUNLAP',
-              'MMSI: 367756210',
-              'Time UTC: 2024-08-24 06:24:37 UTC',
+              _buildItem('Ship Name:', 'WECK DUNLAP'),
+              _buildItem('MMSI:', '367756210'),
+              _buildItem('Time UTC:', '2024-08-24 06:24:37 UTC'),
             ],
           ),
           _buildElevatedSection(
             title: 'Physical Dimensions',
             items: [
-              'Length: ...',
-              'Width: ...',
-              'Height: ...',
-              'Draft: ...',
+              _buildItem('Length:', '....'),
+              _buildItem('Width:', '...'),
+              _buildItem('Height:', '...'),
+              _buildItem('Draft:', '...'),
             ],
           ),
           _buildElevatedSection(
             title: 'Portioning Details',
             items: [
-              'Fuel Level: ...',
-              'Cargo Distribution: ...',
-              'Ballast: ...',
+              _buildItem('Fuel Level:', '...'),
+              _buildItem('Cargo Distribution:', '...'),
+              _buildItem('Ballast:', '....'),
             ],
+          ),
+          FutureBuilder<String>(
+            future: _fetchCollisionStatus(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                final status = snapshot.data ?? '';
+                return _buildElevatedSection(
+                  title: 'Collision Details',
+                  items: [_buildCollisionItem(status)],
+                );
+              }
+            },
           ),
         ],
       ),
@@ -69,7 +90,7 @@ class _VesselTrackingState extends State<VesselTracking> {
 
   Widget _buildElevatedSection({
     required String title,
-    required List<String> items,
+    required List<Widget> items,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -96,20 +117,74 @@ class _VesselTrackingState extends State<VesselTracking> {
                 color: Colors.black,
               ),
             ),
-            children: items.map((item) {
-              return ListTile(
-                title: Text(
-                  item,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-              );
-            }).toList(),
+            children: items,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildItem(String label, String value) {
+    return Container(
+      color: Colors.grey[200],
+      child: ListTile(
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+      ),
+    );
+  }
+
+  Widget _buildCollisionItem(String status) {
+    Color color;
+    switch (status) {
+      case 'Collision Detected':
+        color = Colors.red;
+        break;
+      case 'Collision Possible':
+        color = Colors.orange;
+        break;
+      case 'No Collision Possible':
+        color = Colors.green;
+        break;
+      default:
+        color = Colors.grey;
+    }
+
+    return Container(
+      color: Colors.grey[200],
+      child: ListTile(
+        title: Center(
+          child: Text(
+            status,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
     );
   }

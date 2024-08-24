@@ -21,8 +21,9 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Collision Risk Strategy',
-            style: TextStyle(color: Colors.white, fontSize: 18,
+            style: TextStyle(color: Colors.black, fontSize: 18,
               fontWeight: FontWeight.bold,)),
         backgroundColor: MyColors.primary,
       ),
