@@ -13,6 +13,7 @@ class AisDataFetcher extends GetxController {
     "BoundingBoxes": [[[18,-98],[30,-81]]]
 }''';
 
+
   connectSocket() async
   {
     try{

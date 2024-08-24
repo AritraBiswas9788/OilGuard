@@ -6,7 +6,8 @@ import 'package:oil_guard/components/vessel_tracking.dart';
 import 'package:oil_guard/constants/my_colors.dart';
 import 'package:oil_guard/generated/assets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'
+    '';
 
 import '../utils/ais_data_fetcher.dart';
 
