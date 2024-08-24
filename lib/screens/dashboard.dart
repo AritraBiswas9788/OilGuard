@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oil_guard/generated/assets.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -8,6 +9,11 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late GoogleMapController _mapController;
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
@@ -23,7 +29,6 @@ class _DashboardState extends State<Dashboard> {
         ),
         leading: InkWell(
           onTap: (){
-            print("Fuck you");
           },
           child: const Padding(
             padding: EdgeInsets.all(16.0),
@@ -33,8 +38,12 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: Stack(
         children: [
-
-          Row(
+          GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: _onMapCreated,
+          ),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -44,5 +53,9 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
     ));
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
   }
 }

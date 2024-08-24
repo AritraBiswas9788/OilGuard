@@ -1,4 +1,3 @@
-
 class AisData {
   Message? message;
   String? messageType;

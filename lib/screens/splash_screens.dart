@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:oil_guard/generated/assets.dart';
 
 import 'dashboard.dart';
@@ -15,9 +16,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
+      /*Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const Dashboard()),
-      );
+      );*/
+
+      Get.to(()=>const Dashboard());
     });
   }
   @override
