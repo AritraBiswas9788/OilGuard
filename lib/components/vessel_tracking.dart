@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:oil_guard/constants/my_colors.dart';
+import 'package:get/get.dart';
+import 'package:oil_guard/data_class/ais_data.dart';
+import 'package:oil_guard/utils/ais_data_fetcher.dart';
 
 class VesselTracking extends StatefulWidget {
   const VesselTracking({super.key});
@@ -9,9 +14,28 @@ class VesselTracking extends StatefulWidget {
 }
 
 class _VesselTrackingState extends State<VesselTracking> {
+  late AisDataFetcher aisDataFetcher;
+
   Future<String> _fetchCollisionStatus() async {
     await Future.delayed(const Duration(seconds: 2));
     return 'Collision Possible';
+  }
+  List<AisData> dataList = [];
+  // String vesselID = "203999323";
+
+  @override
+  void initState() {
+    super.initState();
+    aisDataFetcher = Get.find();
+    Timer.periodic(const Duration(seconds: 4),(timer){
+      print("yes!!!!!!!!!!!!!!!!!!!!!!");
+      setState(() {
+        var data = aisDataFetcher.getAISData();
+        dataList.clear();
+        data.forEach((_, val) => dataList.add(val));
+        print(data);
+      });
+    });
   }
 
   @override
@@ -29,62 +53,80 @@ class _VesselTrackingState extends State<VesselTracking> {
         ),
         backgroundColor: MyColors.primary,
       ),
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          _buildElevatedSection(
+      body: ListView.builder(
+        itemCount: dataList.length,
+        itemBuilder: (context, index){
+          return _buildElevatedSection(
             title: 'Navigation Details',
             items: [
-              _buildItem('Speed Over Ground:', '0 knots'),
-              _buildItem('Course Over Ground:', '267.6°'),
-              _buildItem('Navigation Status:', 'Underway'),
-              _buildItem('Rate of Turn:', '-128°/min'),
-              _buildItem('Last Known Position:', 'Latitude 29.7953, Longitude -93.9492'),
+              _buildItem('Speed Over Ground:', dataList[index].message?.positionReport?.sog.toString()),
+              _buildItem('Course Over Ground:', dataList[index].message?.positionReport?.cog.toString()),
+              _buildItem('Navigation Status:', dataList[index].message?.positionReport?.navigationalStatus.toString()),
+              _buildItem('Rate of Turn:', dataList[index].message?.positionReport?.rateOfTurn.toString()),
+              _buildItem('Last Known Position:', 'Latitude ${dataList[index].message?.positionReport?.latitude.toString()}, Longitude ${dataList[index].message?.positionReport?.longitude.toString()}'),
+              _buildItem('Ship Name:', dataList[index].metaData?.shipName.toString()),
+              _buildItem('MMSI:', dataList[index].metaData?.mmsi.toString()),
+              _buildItem('Time UTC:', dataList[index].metaData?.timeUtc.toString()),
             ],
-          ),
-          _buildElevatedSection(
-            title: 'Vessel Characteristics',
-            items: [
-              _buildItem('Ship Name:', 'WECK DUNLAP'),
-              _buildItem('MMSI:', '367756210'),
-              _buildItem('Time UTC:', '2024-08-24 06:24:37 UTC'),
-            ],
-          ),
-          _buildElevatedSection(
-            title: 'Physical Dimensions',
-            items: [
-              _buildItem('Length:', '....'),
-              _buildItem('Width:', '...'),
-              _buildItem('Height:', '...'),
-              _buildItem('Draft:', '...'),
-            ],
-          ),
-          _buildElevatedSection(
-            title: 'Portioning Details',
-            items: [
-              _buildItem('Fuel Level:', '...'),
-              _buildItem('Cargo Distribution:', '...'),
-              _buildItem('Ballast:', '....'),
-            ],
-          ),
-          FutureBuilder<String>(
-            future: _fetchCollisionStatus(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final status = snapshot.data ?? '';
-                return _buildElevatedSection(
-                  title: 'Collision Details',
-                  items: [_buildCollisionItem(status)],
-                );
-              }
-            },
-          ),
-        ],
-      ),
+          );
+        },
+      )
+      // body: ListView(
+      //   padding: EdgeInsets.zero,
+      //   children: [
+      //     _buildElevatedSection(
+      //       title: 'Navigation Details',
+      //       items: [
+      //         _buildItem('Speed Over Ground:', data[vesselID]?.message?.positionReport?.sog.toString()),
+      //         _buildItem('Course Over Ground:', data[vesselID]?.message?.positionReport?.cog.toString()),
+      //         _buildItem('Navigation Status:', data[vesselID]?.message?.positionReport?.navigationalStatus.toString()),
+      //         _buildItem('Rate of Turn:', data[vesselID]?.message?.positionReport?.rateOfTurn.toString()),
+      //         _buildItem('Last Known Position:', 'Latitude ${data[vesselID]?.message?.positionReport?.latitude.toString()}, Longitude ${data[vesselID]?.message?.positionReport?.longitude.toString()}'),
+      //       ],
+      //     ),
+      //     _buildElevatedSection(
+      //       title: 'Vessel Characteristics',
+      //       items: [
+      //         _buildItem('Ship Name:', data[vesselID]?.metaData?.shipName.toString()),
+      //         _buildItem('MMSI:', data[vesselID]?.metaData?.mmsi.toString()),
+      //         _buildItem('Time UTC:', data[vesselID]?.metaData?.timeUtc.toString()),
+      //       ],
+      //     ),
+      //     // _buildElevatedSection(
+      //     //   title: 'Physical Dimensions',
+      //     //   items: [
+      //     //     _buildItem('Length:', '....'),
+      //     //     _buildItem('Width:', '...'),
+      //     //     _buildItem('Height:', '...'),
+      //     //     _buildItem('Draft:', '...'),
+      //     //   ],
+      //     // ),
+      //     _buildElevatedSection(
+      //       title: 'Portioning Details',
+      //       items: [
+      //         _buildItem('Fuel Level:', '...'),
+      //         _buildItem('Cargo Distribution:', '...'),
+      //         _buildItem('Ballast:', '....'),
+      //       ],
+      //     ),
+      //     FutureBuilder<String>(
+      //       future: _fetchCollisionStatus(),
+      //       builder: (context, snapshot) {
+      //         if (snapshot.connectionState == ConnectionState.waiting) {
+      //           return Center(child: CircularProgressIndicator());
+      //         } else if (snapshot.hasError) {
+      //           return Center(child: Text('Error: ${snapshot.error}'));
+      //         } else {
+      //           final status = snapshot.data ?? '';
+      //           return _buildElevatedSection(
+      //             title: 'Collision Details',
+      //             items: [_buildCollisionItem(status)],
+      //           );
+      //         }
+      //       },
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -124,7 +166,7 @@ class _VesselTrackingState extends State<VesselTracking> {
     );
   }
 
-  Widget _buildItem(String label, String value) {
+  Widget _buildItem(String label, String? value) {
     return Container(
       color: Colors.grey[200],
       child: ListTile(

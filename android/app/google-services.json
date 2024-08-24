@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:109394563647:android:6ebddb38d9c5941921de8a",
         "android_client_info": {
-          "package_name": "com.oilguard.app"
+          "package_name": "com.example.oil_guard"
         }
       },
       "oauth_client": [],
