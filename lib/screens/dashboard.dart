@@ -3,6 +3,7 @@ import 'package:oil_guard/components/alert_system.dart';
 import 'package:oil_guard/components/collision_prediction.dart';
 import 'package:oil_guard/components/home.dart';
 import 'package:oil_guard/components/vessel_tracking.dart';
+import 'package:oil_guard/constants/my_colors.dart';
 import 'package:oil_guard/generated/assets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -167,7 +168,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Container(
                   width: 50,
                   height: 50,
-                  color: Colors.black.withOpacity(0.5),
+                  color: MyColors.primary,
                   child: Center(
                     child: Icon(
                       !_isRightSidebarOpen ? Icons.arrow_left : Icons.arrow_right,
