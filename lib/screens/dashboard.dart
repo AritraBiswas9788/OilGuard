@@ -88,13 +88,43 @@ class _DashboardState extends State<Dashboard> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            // const DrawerHeader(
+            //   decoration: BoxDecoration(
+            //     color: MyColors.backgroundColor,
+            //   ),
+            //   child: Text('Drawer Header'),
+            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Image.asset(
+                      Assets.assetsShip,
+                      width: 60,
+                    ),
+                  ),
+                  Text(
+                    'Oil Guard',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                ],
               ),
-              child: Text('Drawer Header'),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Container(
+                height: 2,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                color: Colors.black,
+              ),
             ),
             ListTile(
+              leading: const Icon(Icons.home,
+                color: MyColors.primary,
+              ),
               title: const Text('Home'),
               onTap: () {
                 setState(() {
@@ -105,6 +135,7 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.track_changes, color: MyColors.primary,),
               title: const Text('Vessel tracking'),
               onTap: () {
                 // Update the state of the app.
@@ -115,6 +146,7 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.crisis_alert_rounded, color: MyColors.primary,),
               title: const Text('Collision'),
               onTap: () {
                 // Update the state of the app.
@@ -125,6 +157,7 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.warning, color: MyColors.primary,),
               title: const Text('Alert system'),
               onTap: () {
                 setState(() {
@@ -156,14 +189,14 @@ class _DashboardState extends State<Dashboard> {
                 offset: const Offset(-30, 0),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: !_isRightSidebarOpen ? 30 : 30 + MediaQuery.of(context).size.width/3, // Change width based on isCollapsed
+                  width: !_isRightSidebarOpen ? 30 : MediaQuery.of(context).size.width/3, // Change width based on isCollapsed
                   color: Colors.transparent,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // Sidebar content goes here
                       Container(
-                        margin: const EdgeInsets.only(top: 30),
+                        margin: const EdgeInsets.only(top: 15),
                         child: GestureDetector(
                           onTap: _toggleRightSidebar,
                           child: ClipRRect(
