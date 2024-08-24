@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oil_guard/constants/my_colors.dart';
 
 class VesselTracking extends StatefulWidget {
   const VesselTracking({super.key});
@@ -11,22 +12,21 @@ class _VesselTrackingState extends State<VesselTracking> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Vessel Tracking',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: MyColors.primary,
+      ),
+      body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Info Drawer',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
-          ),
           _buildElevatedSection(
             title: 'Navigation Details',
             items: [
@@ -48,18 +48,18 @@ class _VesselTrackingState extends State<VesselTracking> {
           _buildElevatedSection(
             title: 'Physical Dimensions',
             items: [
-              'Length: N/A',
-              'Width: N/A',
-              'Height: N/A',
-              'Draft: N/A',
+              'Length: ...',
+              'Width: ...',
+              'Height: ...',
+              'Draft: ...',
             ],
           ),
           _buildElevatedSection(
             title: 'Portioning Details',
             items: [
-              'Fuel Level: N/A',
-              'Cargo Distribution: N/A',
-              'Ballast: N/A',
+              'Fuel Level: ...',
+              'Cargo Distribution: ...',
+              'Ballast: ...',
             ],
           ),
         ],
@@ -88,10 +88,23 @@ class _VesselTrackingState extends State<VesselTracking> {
       child: Column(
         children: [
           ExpansionTile(
-            title: Text(title),
+            title: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
             children: items.map((item) {
               return ListTile(
-                title: Text(item),
+                title: Text(
+                  item,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
               );
             }).toList(),
@@ -101,4 +114,3 @@ class _VesselTrackingState extends State<VesselTracking> {
     );
   }
 }
-

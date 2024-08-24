@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/my_colors.dart';
+
 class AlertSystem extends StatefulWidget {
   const AlertSystem({super.key});
 
@@ -11,7 +13,6 @@ class _AlertSystemState extends State<AlertSystem> {
 
   @override
   Widget build(BuildContext context) {
-    // Sample data for past and upcoming collisions
     final pastCollisions = [
       {'date': '.....', 'location': 'Gulf Of Mexico', 'details': 'Collision with vessel X'},
       {'date': '2024-07-20', 'location': '.....', 'details': 'Collision with vessel Y'},
@@ -24,14 +25,10 @@ class _AlertSystemState extends State<AlertSystem> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Collision Reports'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop(); // Go back to the previous screen
-          },
-        ),
-      ),
+        title: const Text('Collision Reports',style: TextStyle(color: Colors.white,fontSize: 18,
+          fontWeight: FontWeight.bold,)),
+      backgroundColor: MyColors.primary,
+    ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

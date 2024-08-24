@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oil_guard/constants/my_colors.dart';
 
 class CollisionPrediction extends StatefulWidget {
   const CollisionPrediction({super.key});
@@ -20,33 +21,32 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Collision Risk Strategy'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        title: const Text('Collision Risk Strategy',
+            style: TextStyle(color: Colors.white, fontSize: 18,
+              fontWeight: FontWeight.bold,)),
+        backgroundColor: MyColors.primary,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DetailRow(
               title: 'Own Vessel MMSI:',
               value: ownVesselMMSI.toString(),
+              multiLine: true,
             ),
             const SizedBox(height: 10),
             DetailRow(
               title: 'Target Vessel MMSI:',
               value: targetVesselMMSI.toString(),
+              multiLine: true,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 14),
             Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(14.0),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: MyColors.backgroundColor,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Column(
@@ -55,18 +55,20 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
                   DetailRow(
                     title: 'Closest Point of Approach (CPA):',
                     value: '$cpa nautical miles',
+                    multiLine: true,
                   ),
                   const SizedBox(height: 10),
                   DetailRow(
                     title: 'Time to CPA (TCPA):',
                     value: '$tcpa minutes',
+                    multiLine: true,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Center(
                     child: Text(
                       isCollisionRisk ? 'Collision Risk Detected' : 'No Collision Risk Detected',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isCollisionRisk ? Colors.red : Colors.green,
                       ),
@@ -85,29 +87,51 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
 class DetailRow extends StatelessWidget {
   final String title;
   final String value;
+  final bool multiLine;
 
   const DetailRow({
     required this.title,
     required this.value,
+    this.multiLine = false,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return multiLine
+        ? Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 14,
+          ),
+        ),
+      ],
+    )
+        : Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 10,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 10,
           ),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oil_guard/constants/my_colors.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,13 +13,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About AIS Visualize'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        title: const Text('About AIS Visualize',
+        style: TextStyle(color: Colors.white,fontSize: 18,
+          fontWeight: FontWeight.bold,)),
+        backgroundColor: MyColors.primary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,7 +25,7 @@ class _HomeState extends State<Home> {
             Text(
               'AIS Visualize',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -40,11 +38,11 @@ class _HomeState extends State<Home> {
             Text(
               'Key Features:',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 14),
             BulletPoint(text: 'Track Ships Live'),
             BulletPoint(text: 'Check Past Routes'),
             BulletPoint(text: 'Get Ship Details'),
@@ -70,7 +68,7 @@ class BulletPoint extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.brightness_1, size: 8, color: Colors.black),
+          const Icon(Icons.brightness_1, size: 8, color: MyColors.backgroundColor),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
