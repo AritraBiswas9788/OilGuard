@@ -50,8 +50,17 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  // double screenWidth = 0;
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   screenWidth = MediaQuery.of(context).size.width;
+  // }
+
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(child: Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -132,6 +141,10 @@ class _DashboardState extends State<Dashboard> {
         children: [
           Row(
             children: [
+              // FloatingArrow(
+              //   isOpen: _isRightSidebarOpen,
+              //   onTap: _toggleRightSidebar,
+              // ),
               Expanded(
                 child: GoogleMap(
                   mapType: MapType.hybrid,
@@ -139,60 +152,52 @@ class _DashboardState extends State<Dashboard> {
                   onMapCreated: _onMapCreated,
                 ),
               ),
-              // FloatingArrow(
-              //   isOpen: _isRightSidebarOpen,
-              //   onTap: _toggleRightSidebar,
-              // ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: !_isRightSidebarOpen ? 05 : 300, // Change width based on isCollapsed
-                color: Colors.blueGrey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    // Sidebar content goes here
-                    Expanded(
-                      child: widgetList[i]
-                    ),
-                    // Collapse/Expand Button
-                    // IconButton(
-                    //   icon: Icon(
-                    //     _isRightSidebarOpen ? Icons.arrow_right : Icons.arrow_left,
-                    //     color: Colors.white,
-                    //   ),
-                    //   onPressed: _toggleRightSidebar
-                    // ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            right: !_isRightSidebarOpen ? 50 : 300, // Position FAB based on sidebar state
-            top: 10,
-            child: GestureDetector(
-              onTap: _toggleRightSidebar,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  bottomLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(0.0),
-                  bottomRight: Radius.circular(0.0),
-                ),
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  color: MyColors.primary,
-                  child: Center(
-                    child: Icon(
-                      !_isRightSidebarOpen ? Icons.arrow_left : Icons.arrow_right,
-                      color: Colors.white,
-                    ),
+              Transform.translate(
+                offset: const Offset(-30, 0),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: !_isRightSidebarOpen ? 30 : 30 + MediaQuery.of(context).size.width/3, // Change width based on isCollapsed
+                  color: Colors.transparent,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Sidebar content goes here
+                      Container(
+                        margin: const EdgeInsets.only(top: 30),
+                        child: GestureDetector(
+                          onTap: _toggleRightSidebar,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              bottomLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(0.0),
+                              bottomRight: Radius.circular(0.0),
+                            ),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              color: MyColors.backgroundColor,
+                              child: Center(
+                                child: Icon(
+                                  !_isRightSidebarOpen ? Icons.arrow_left : Icons.arrow_right,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                          child: widgetList[i]
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
+
+            ],
           ),
+
         ],
       ),
     ));
@@ -221,52 +226,5 @@ class _DashboardState extends State<Dashboard> {
       print("error");
       throw 'Unable to plot map${e}';
     }
-  }
-
-  Widget _buildCollapsedRightSidebar() {
-    return Container(
-      width: 40,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40.0),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            spreadRadius: 3,
-            blurRadius: 20,
-            offset: Offset(10, 10),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRightSidebar() {
-      return Container(
-        decoration: const BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40.0),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 3,
-              blurRadius: 20,
-              offset: Offset(10, 10),
-            ),
-          ],
-        ),
-        width: 400,
-        child: Column(
-          children: [
-            Expanded(
-              child: widgetList[i],
-            ),
-          ],
-        ),
-      );
   }
 }
