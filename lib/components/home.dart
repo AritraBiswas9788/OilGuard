@@ -13,8 +13,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About AIS Visualize',
-        style: TextStyle(color: Colors.white,fontSize: 18,
+        centerTitle: true,
+        title: const Text('ABOUT',
+        style: TextStyle(color: Colors.black,fontSize: 18,
           fontWeight: FontWeight.bold,)),
         backgroundColor: MyColors.primary,
       ),

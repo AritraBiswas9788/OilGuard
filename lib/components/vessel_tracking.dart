@@ -18,10 +18,11 @@ class _VesselTrackingState extends State<VesselTracking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
-          'Vessel Tracking',
+          'VESSEL TRACKING',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -34,36 +35,36 @@ class _VesselTrackingState extends State<VesselTracking> {
           _buildElevatedSection(
             title: 'Navigation Details',
             items: [
-              _buildItem('Speed Over Ground: 0 knots'),
-              _buildItem('Course Over Ground: 267.6°'),
-              _buildItem('Navigation Status: Underway'),
-              _buildItem('Rate of Turn: -128°/min'),
-              _buildItem('Last Known Position: Latitude 29.7953, Longitude -93.9492'),
+              _buildItem('Speed Over Ground:', '0 knots'),
+              _buildItem('Course Over Ground:', '267.6°'),
+              _buildItem('Navigation Status:', 'Underway'),
+              _buildItem('Rate of Turn:', '-128°/min'),
+              _buildItem('Last Known Position:', 'Latitude 29.7953, Longitude -93.9492'),
             ],
           ),
           _buildElevatedSection(
             title: 'Vessel Characteristics',
             items: [
-              _buildItem('Ship Name: WECK DUNLAP'),
-              _buildItem('MMSI: 367756210'),
-              _buildItem('Time UTC: 2024-08-24 06:24:37 UTC'),
+              _buildItem('Ship Name:', 'WECK DUNLAP'),
+              _buildItem('MMSI:', '367756210'),
+              _buildItem('Time UTC:', '2024-08-24 06:24:37 UTC'),
             ],
           ),
           _buildElevatedSection(
             title: 'Physical Dimensions',
             items: [
-              _buildItem('Length: ...'),
-              _buildItem('Width: ...'),
-              _buildItem('Height: ...'),
-              _buildItem('Draft: ...'),
+              _buildItem('Length:', '....'),
+              _buildItem('Width:', '...'),
+              _buildItem('Height:', '...'),
+              _buildItem('Draft:', '...'),
             ],
           ),
           _buildElevatedSection(
             title: 'Portioning Details',
             items: [
-              _buildItem('Fuel Level: ...'),
-              _buildItem('Cargo Distribution: ...'),
-              _buildItem('Ballast: ...'),
+              _buildItem('Fuel Level:', '...'),
+              _buildItem('Cargo Distribution:', '...'),
+              _buildItem('Ballast:', '....'),
             ],
           ),
           FutureBuilder<String>(
@@ -123,16 +124,34 @@ class _VesselTrackingState extends State<VesselTracking> {
     );
   }
 
-  Widget _buildItem(String item) {
-    return ListTile(
-      title: Text(
-        item,
-        style: const TextStyle(
-          fontSize: 14,
-          color: Colors.black,
+  Widget _buildItem(String label, String value) {
+    return Container(
+      color: Colors.grey[200],
+      child: ListTile(
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
     );
   }
 
@@ -152,18 +171,21 @@ class _VesselTrackingState extends State<VesselTracking> {
         color = Colors.grey;
     }
 
-    return ListTile(
-      title: Center(
-        child: Text(
-          status,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: color,
+    return Container(
+      color: Colors.grey[200],
+      child: ListTile(
+        title: Center(
+          child: Text(
+            status,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
           ),
         ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
     );
   }
 }
