@@ -213,9 +213,10 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
         double cpa = res['cpa'];
         double tcpa = res['tcpa'];
         String alertType = "Low";
-        if(tcpa < 6) alertType = "High";
-        else if(tcpa < 10) alertType = "Medium";
-        else if(tcpa < 15) alertType = "Low";
+        if(tcpa <2) continue;
+        if(tcpa < 2.5) alertType = "High";
+        else if(tcpa < 3.5) alertType = "Medium";
+        else if(tcpa < 8) alertType = "Low";
         else continue;
         collisionDataList.add(
           CollisionData(
@@ -232,6 +233,9 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
         );
       }
     }
+    collisionDataList.sort((d1, d2){
+      return d1.tcpa.compareTo(d2.tcpa);
+    });
     setState(() {
 
     });
