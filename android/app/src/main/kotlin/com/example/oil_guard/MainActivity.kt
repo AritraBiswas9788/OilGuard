@@ -24,7 +24,18 @@ class MainActivity: FlutterActivity()
                 run {
                     result.success(kmlData);
                 }
-            } else {
+            } else
+                if (call.method == "map#removeKML")
+                {
+                    //writekmlToFile(call.arguments as String)
+                    val kmlData = getKMLemptyResource();
+                    val kmlDatalog = loadKMLFromResource(kmlData);
+                    run {
+                        result.success(kmlData);
+                    }
+                }
+            else
+            {
                 result.notImplemented();
             }
         }
@@ -46,5 +57,8 @@ class MainActivity: FlutterActivity()
 
     private fun getKMLResource(): Int {
         return R.raw.drone_path;
+    }
+    private  fun getKMLemptyResource():Int {
+        return R.raw.clear;
     }
 }

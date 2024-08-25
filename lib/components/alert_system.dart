@@ -9,6 +9,12 @@ class AlertSystem extends StatefulWidget {
 }
 
 class _AlertSystemState extends State<AlertSystem> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final pastCollisions = [

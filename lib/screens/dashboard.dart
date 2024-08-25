@@ -136,6 +136,7 @@ class _DashboardState extends State<Dashboard> {
                 setState(() {
                   i = 0;
                 });
+                removeKML(_mapController);
                 // Update the state of the app.
                 Navigator.pop(context);
               },
@@ -151,6 +152,7 @@ class _DashboardState extends State<Dashboard> {
                 setState(() {
                   i = 1;
                 });
+                removeKML(_mapController);
                 Navigator.pop(context);
               },
             ),
@@ -165,6 +167,7 @@ class _DashboardState extends State<Dashboard> {
                 setState(() {
                   i = 2;
                 });
+                removeKML(_mapController);
                 Navigator.pop(context);
               },
             ),
@@ -178,6 +181,7 @@ class _DashboardState extends State<Dashboard> {
                 setState(() {
                   i = 3;
                 });
+                addKml(_mapController);
                 // Update the state of the app.
                 Navigator.pop(context);
               },
@@ -365,6 +369,76 @@ class _DashboardState extends State<Dashboard> {
         'resourceId': kmlResourceId,
       });
       print('addKml done${c}');
+    } on PlatformException catch (e) {
+      throw 'Unable to plot map: ${e.message}';
+    } catch (e) {
+      print("error");
+      throw 'Unable to plot map${e}';
+    }
+  }
+
+  static Future<void> removeKML(GoogleMapController mapController) async {
+    print('removeKml');
+    var mapId = mapController.mapId;
+    const MethodChannel channel = MethodChannel('flutter.native/helper');
+    final MethodChannel kmlchannel =
+    MethodChannel('plugins.flutter.dev/google_maps_android_${mapId}');
+    String kml = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Untitled Polygon.kml</name>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Placemark>
+		<name>Untitled Polygon</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Polygon>
+			<tessellate>1</tessellate>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						1.968789847662598,1.032332438054204,0 2.030775501330602,0.9726693528318184,0 8.046913954073355,6.979662875552394,0 7.966524661513443,7.029284663505754,0 1.968789847662598,1.032332438054204,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>
+''';
+    try {
+      int kmlResourceId = await channel.invokeMethod('map#removeKML', kml);
+
+      var c = kmlchannel.invokeMethod("map#removeKML", <String, dynamic>{
+        'resourceId': kmlResourceId,
+      });
+      print('removeKml done${c}');
     } on PlatformException catch (e) {
       throw 'Unable to plot map: ${e.message}';
     } catch (e) {
