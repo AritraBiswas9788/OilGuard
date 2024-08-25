@@ -47,7 +47,7 @@ class _AlertSystemState extends State<AlertSystem> {
           children: [
             Center(
               child: const Text(
-                'Past Oil Spills',
+                'Oil Spills',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
