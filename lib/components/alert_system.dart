@@ -31,7 +31,7 @@ class _AlertSystemState extends State<AlertSystem> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'COLLISION REPORTS',
+          'ALERT SYSTEM',
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
