@@ -135,6 +135,16 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
                       ),
                       const SizedBox(height: 10),
                       Text(
+                        "CPA: ${alert.cpa.toStringAsFixed(2)} km", // Display CPA with two decimal places
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "TCPA: ${alert.tcpa.toStringAsFixed(2)} minutes", // Display TCPA with two decimal places
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
                         "Risk Level: ${alert.riskLevel}",
                         style: TextStyle(
                           fontSize: 16,
@@ -163,6 +173,8 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
     //     vessel2Lat: "12.35° N",
     //     vessel2Lng: "56.79° W",
     //     riskLevel: "High",
+    //     cpa: 0.5, // Example CPA value in nautical miles
+    //     tcpa: 10.0, // Example TCPA value in minutes
     //   ),
     //   CollisionData(
     //     vessel1Name: "Vessel C",
@@ -172,6 +184,8 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
     //     vessel2Lat: "23.46° N",
     //     vessel2Lng: "67.90° W",
     //     riskLevel: "Medium",
+    //     cpa: 1.2, // Example CPA value in nautical miles
+    //     tcpa: 20.0, // Example TCPA value in minutes
     //   ),
     //   CollisionData(
     //     vessel1Name: "Vessel E",
@@ -181,6 +195,8 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
     //     vessel2Lat: "34.57° N",
     //     vessel2Lng: "78.91° W",
     //     riskLevel: "Low",
+    //     cpa: 2.5, // Example CPA value in nautical miles
+    //     tcpa: 30.0, // Example TCPA value in minutes
     //   ),
     // ];
     // return;
@@ -210,6 +226,8 @@ class _CollisionPredictionState extends State<CollisionPrediction> {
             vessel2Lat: dataList[j].metaData!.latitude.toString(),
             vessel2Lng: dataList[j].metaData!.longitude.toString(),
             riskLevel: alertType,
+            tcpa: tcpa,
+            cpa: cpa,
           )
         );
       }

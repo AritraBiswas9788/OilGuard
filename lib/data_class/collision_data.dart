@@ -1,3 +1,5 @@
+
+
 class CollisionData {
   final String vessel1Name;
   final String vessel1Lat;
@@ -6,6 +8,8 @@ class CollisionData {
   final String vessel2Lat;
   final String vessel2Lng;
   final String riskLevel;
+  final double cpa;
+  final double tcpa;
 
   CollisionData({
     required this.vessel1Name,
@@ -15,5 +19,7 @@ class CollisionData {
     required this.vessel2Lat,
     required this.vessel2Lng,
     required this.riskLevel,
+    required this.cpa,
+    required this.tcpa
   });
 }
