@@ -82,7 +82,7 @@ class Message {
 }
 
 class PositionReport {
-  int? cog;
+  double? cog;
   int? communicationState;
   double? latitude;
   double? longitude;
@@ -103,8 +103,14 @@ class PositionReport {
   PositionReport({this.cog, this.communicationState, this.latitude, this.longitude, this.messageId, this.navigationalStatus, this.positionAccuracy, this.raim, this.rateOfTurn, this.repeatIndicator, this.sog, this.spare, this.specialManoeuvreIndicator, this.timestamp, this.trueHeading, this.userId, this.valid});
 
   PositionReport.fromJson(Map<String, dynamic> json) {
-    if(json["Cog"] is int)
-      this.cog = json["Cog"];
+
+    try {
+      this.cog = double.parse(json["Cog"].toString());
+    }
+    catch(e)
+    {
+      print(e);
+    }
     if(json["CommunicationState"] is int)
       this.communicationState = json["CommunicationState"];
     if(json["Latitude"] is double)

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:web_socket_client/web_socket_client.dart';
 class AisDataFetcher extends GetxController {
   late WebSocket socketClient;
   late Timer _kmlTimer;
+  var isConnected = false.obs;
   late DataHandler dataHandler;
   Map<String, AisData> aisData = {};
   static const String socketEndpoint = "wss://stream.aisstream.io/v0/stream";
@@ -17,9 +19,26 @@ class AisDataFetcher extends GetxController {
     "APIKey": "963147f1d105d72730ec6435e9a408c66cf2fefe",
     "BoundingBoxes": [[[18,-98],[30,-81]]]
 }''';
+  double height = 1;
+  double width = 0.5;
 
+  // Function to rotate a point around a given center by a specific angle
+  LatLng rotatePoint(LatLng point, LatLng center, double angle) {
+    double radian = angle * pi / 180; // Convert angle to radians
+
+    // Translate point to origin
+    double tempLat = point.latitude - center.latitude;
+    double tempLng = point.longitude - center.longitude;
+
+    // Apply rotation
+    double rotatedLat = tempLat * cos(radian) - tempLng * sin(radian);
+    double rotatedLng = tempLat * sin(radian) + tempLng * cos(radian);
+
+    // Translate back to original position
+    return LatLng(rotatedLat + center.latitude, rotatedLng + center.longitude);
+  }
   List<LatLng> generatePolygonPoints(
-      LatLng center, double width, double height) {
+      LatLng center, double width, double height, double angle) {
     final List<LatLng> points = [];
 
     // Calculate the offset distances
@@ -43,6 +62,11 @@ class AisDataFetcher extends GetxController {
     points.add(LatLng(center.latitude + peakHeight,
         center.longitude));// Bottom right of the rectangle
 
+    // Rotate each point around the center by the specified angle
+    for (int i = 0; i < points.length; i++) {
+      points[i] = rotatePoint(points[i], center, angle);
+    }
+
     return points;
   }
 
@@ -52,6 +76,11 @@ class AisDataFetcher extends GetxController {
       socketClient = WebSocket(Uri.parse(socketEndpoint), timeout: timeout);
       await socketClient.connection.firstWhere(
           (state) => (state is Connected) || (state is Reconnected));
+      isConnected.value = true;
+      socketClient.connection.listen((state){
+        if(state is Disconnected)
+          {isConnected.value = false;}
+      });
       socketClient.send(transactionReq);
       _attachTransactionRecievers();
       _startKMLGenerator();
@@ -68,9 +97,9 @@ class AisDataFetcher extends GetxController {
         AisData data = AisData.fromJson(jsonData);
         try {
           aisData[data.message!.positionReport!.userId!] = data;
-          print(aisData.length);
+          //print(aisData.length);
         } catch (e) {
-          //print(e);
+          print(e);
         }
       });
     } catch (e) {
@@ -81,6 +110,7 @@ class AisDataFetcher extends GetxController {
   closeSocketConnection() {
     socketClient.close();
     _kmlTimer.cancel();
+    isConnected.value = false;
   }
 
   void setDataHandler(DataHandler handler)
@@ -89,21 +119,25 @@ class AisDataFetcher extends GetxController {
   }
 
   void _startKMLGenerator() {
-    _kmlTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    _kmlTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       List<List<LatLng>> points = [];
+      List<AisData> data = [];
       for (final vessel in aisData.values) {
         try {
           points.add(generatePolygonPoints(
               LatLng(vessel.message!.positionReport!.latitude!,
                   vessel.message!.positionReport!.longitude!),
-              0.5,
-              1));
+              width,
+              height,
+            vessel.message!.positionReport!.cog!
+          ));
+          data.add(vessel);
         } catch (e) {
           print(e);
         }
       }
       print("Setting ${points.length} polygons");
-      dataHandler.setNewPolygons!(points);
+      dataHandler.setNewPolygons!(points,data);
     });
   }
 
@@ -112,5 +146,49 @@ class AisDataFetcher extends GetxController {
     return aisData;
   }
 
+  void scaleUp() {
+    height*=2;
+    width*=2;
+    List<List<LatLng>> points = [];
+    List<AisData> data = [];
+    for (final vessel in aisData.values) {
+      try {
+        points.add(generatePolygonPoints(
+            LatLng(vessel.message!.positionReport!.latitude!,
+                vessel.message!.positionReport!.longitude!),
+            width,
+            height,
+            vessel.message!.positionReport!.cog!
+        ));
+        data.add(vessel);
+      } catch (e) {
+        //print(e);
+      }
+    }
+    print("Setting ${points.length} polygons");
+    dataHandler.setNewPolygons!(points,data);
+  }
+  void scaleDown() async {
+    height/=2;
+    width/=2;
+    List<List<LatLng>> points = [];
+    List<AisData> data = [];
 
+    for (final vessel in aisData.values) {
+      try {
+        points.add(generatePolygonPoints(
+            LatLng(vessel.message!.positionReport!.latitude!,
+                vessel.message!.positionReport!.longitude!),
+            width,
+            height,
+            vessel.message!.positionReport!.cog!
+        ));
+        data.add(vessel);
+      } catch (e) {
+        print(e);
+      }
+    }
+    print("Setting ${points.length} polygons");
+    dataHandler.setNewPolygons!(points,data);
+  }
 }

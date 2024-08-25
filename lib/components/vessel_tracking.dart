@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oil_guard/constants/my_colors.dart';
 import 'package:get/get.dart';
 import 'package:oil_guard/data_class/ais_data.dart';
+import 'package:oil_guard/generated/assets.dart';
 import 'package:oil_guard/utils/ais_data_fetcher.dart';
 
 class VesselTracking extends StatefulWidget {
@@ -28,10 +29,15 @@ class _VesselTrackingState extends State<VesselTracking> {
     super.initState();
     aisDataFetcher = Get.find();
     Timer.periodic(const Duration(seconds: 4),(timer){
-      print("yes!!!!!!!!!!!!!!!!!!!!!!");
+      print("yes");
       setState(() {
         var data = aisDataFetcher.getAISData();
         dataList.clear();
+        data.forEach((_,val){
+          if(val.metaData!.shipName!=null && val.metaData!.shipName!.isNotEmpty) {
+            dataList.add(val);
+          }
+        });
         data.forEach((_, val) => dataList.add(val));
         print(data);
       });
@@ -57,16 +63,16 @@ class _VesselTrackingState extends State<VesselTracking> {
         itemCount: dataList.length,
         itemBuilder: (context, index){
           return _buildElevatedSection(
-            title: 'Navigation Details',
+            title: '${dataList[index].metaData?.shipName.toString()}',
             items: [
-              _buildItem('Speed Over Ground:', dataList[index].message?.positionReport?.sog.toString()),
-              _buildItem('Course Over Ground:', dataList[index].message?.positionReport?.cog.toString()),
-              _buildItem('Navigation Status:', dataList[index].message?.positionReport?.navigationalStatus.toString()),
-              _buildItem('Rate of Turn:', dataList[index].message?.positionReport?.rateOfTurn.toString()),
-              _buildItem('Last Known Position:', 'Latitude ${dataList[index].message?.positionReport?.latitude.toString()}, Longitude ${dataList[index].message?.positionReport?.longitude.toString()}'),
-              _buildItem('Ship Name:', dataList[index].metaData?.shipName.toString()),
-              _buildItem('MMSI:', dataList[index].metaData?.mmsi.toString()),
-              _buildItem('Time UTC:', dataList[index].metaData?.timeUtc.toString()),
+              _buildItem('Speed Over Ground : ', dataList[index].message?.positionReport?.sog.toString()),
+              _buildItem('Course Over Ground : ', dataList[index].message?.positionReport?.cog.toString()),
+              _buildItem('Navigation Status : ', dataList[index].message?.positionReport?.navigationalStatus.toString()),
+              _buildItem('Rate of Turn : ', dataList[index].message?.positionReport?.rateOfTurn.toString()),
+              _buildItem('Last Known Position : ', 'Latitude ${dataList[index].message?.positionReport?.latitude.toString()}, Longitude ${dataList[index].message?.positionReport?.longitude.toString()}'),
+              _buildItem('Ship Name : ', dataList[index].metaData?.shipName.toString()),
+              _buildItem('MMSI : ', dataList[index].metaData?.mmsi.toString()),
+              _buildItem('Time UTC : ', dataList[index].metaData?.timeUtc.toString()),
             ],
           );
         },
@@ -151,13 +157,19 @@ class _VesselTrackingState extends State<VesselTracking> {
       child: Column(
         children: [
           ExpansionTile(
-            title: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            title: Row(
+              children: [
+                Image.asset(Assets.assetsShip,width: 50.0,height: 50.0,),
+                SizedBox(width: 20.0,),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
             children: items,
           ),

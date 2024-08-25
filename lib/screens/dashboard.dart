@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart'
+    '';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:oil_guard/components/MapElement.dart';
 import 'package:oil_guard/components/alert_system.dart';
 import 'package:oil_guard/components/collision_prediction.dart';
+import 'package:oil_guard/components/glassbox.dart';
 import 'package:oil_guard/components/home.dart';
 import 'package:oil_guard/components/vessel_tracking.dart';
 import 'package:oil_guard/constants/my_colors.dart';
 import 'package:oil_guard/generated/assets.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:get/get.dart'
-    '';
 
 import '../utils/ais_data_fetcher.dart';
 
@@ -24,8 +25,6 @@ class _DashboardState extends State<Dashboard> {
   late GoogleMapController _mapController;
   late AisDataFetcher aisDataFetcher;
   DataHandler dataHandler = DataHandler();
-
-
 
   @override
   void initState() {
@@ -55,19 +54,27 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    return SafeArea(child: Scaffold(
+    return SafeArea(
+        child: Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(Assets.assetsShip,fit: BoxFit.contain,height: 30.0,),
-            const SizedBox(width: 15.0,),
-            const Text("OIL GUARD",style: TextStyle(color: Colors.white),),
+            Image.asset(
+              Assets.assetsShip,
+              fit: BoxFit.contain,
+              height: 30.0,
+            ),
+            const SizedBox(
+              width: 15.0,
+            ),
+            const Text(
+              "OIL GUARD",
+              style: TextStyle(color: Colors.white),
+            ),
           ],
         ),
         leading: Builder(
@@ -120,7 +127,8 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.home,
+              leading: const Icon(
+                Icons.home,
                 color: MyColors.primary,
               ),
               title: const Text('Home'),
@@ -133,7 +141,10 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.track_changes, color: MyColors.primary,),
+              leading: const Icon(
+                Icons.track_changes,
+                color: MyColors.primary,
+              ),
               title: const Text('Vessel tracking'),
               onTap: () {
                 // Update the state of the app.
@@ -144,7 +155,10 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.crisis_alert_rounded, color: MyColors.primary,),
+              leading: const Icon(
+                Icons.crisis_alert_rounded,
+                color: MyColors.primary,
+              ),
               title: const Text('Collision'),
               onTap: () {
                 // Update the state of the app.
@@ -155,7 +169,10 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.warning, color: MyColors.primary,),
+              leading: const Icon(
+                Icons.warning,
+                color: MyColors.primary,
+              ),
               title: const Text('Alert system'),
               onTap: () {
                 setState(() {
@@ -177,19 +194,21 @@ class _DashboardState extends State<Dashboard> {
               //   onTap: _toggleRightSidebar,
               // ),
               Expanded(
-                child: MapElement(
-                  onMapReady: _onMapCreated,
-                  handlerCallback: (handler){
-                    dataHandler = handler;
-                    aisDataFetcher.setDataHandler(handler);
-                  },
-                )
-              ),
+                  child: MapElement(
+                onMapReady: _onMapCreated,
+                handlerCallback: (handler) {
+                  dataHandler = handler;
+                  aisDataFetcher.setDataHandler(handler);
+                },
+              )),
               Transform.translate(
                 offset: const Offset(-30, 0),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: !_isRightSidebarOpen ? 30 : MediaQuery.of(context).size.width/3, // Change width based on isCollapsed
+                  width: !_isRightSidebarOpen
+                      ? 30
+                      : MediaQuery.of(context).size.width /
+                          3, // Change width based on isCollapsed
                   color: Colors.transparent,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +231,9 @@ class _DashboardState extends State<Dashboard> {
                               color: MyColors.backgroundColor,
                               child: Center(
                                 child: Icon(
-                                  !_isRightSidebarOpen ? Icons.arrow_left : Icons.arrow_right,
+                                  !_isRightSidebarOpen
+                                      ? Icons.arrow_left
+                                      : Icons.arrow_right,
                                   color: Colors.white,
                                 ),
                               ),
@@ -220,17 +241,58 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                       ),
-                      Expanded(
-                          child: widgetList[i]
-                      ),
+                      Expanded(child: widgetList[i]),
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
-
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 100.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GlassBox(
+                      height: 75.0,
+                      width: 75.0,
+                      child: InkWell(
+                        onTap: () {
+                          aisDataFetcher.scaleUp();
+                        },
+                        child: const Icon(
+                          Icons.arrow_upward_outlined,
+                          color: Colors.white,
+                          size: 50,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20.0,
+                    ),
+                    GlassBox(
+                      height: 75.0,
+                      width: 75.0,
+                      child: InkWell(
+                        onTap: () {
+                          aisDataFetcher.scaleDown();
+                        },
+                        child: const Icon(
+                          Icons.arrow_downward_outlined,
+                          color: Colors.white,
+                          size: 50,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          )
         ],
       ),
     ));
@@ -245,7 +307,8 @@ class _DashboardState extends State<Dashboard> {
     print('addKml');
     var mapId = mapController.mapId;
     const MethodChannel channel = MethodChannel('flutter.native/helper');
-    final MethodChannel kmlchannel = MethodChannel('plugins.flutter.dev/google_maps_android_${mapId}');
+    final MethodChannel kmlchannel =
+        MethodChannel('plugins.flutter.dev/google_maps_android_${mapId}');
     String kml = '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
 <Document>
@@ -296,7 +359,7 @@ class _DashboardState extends State<Dashboard> {
 </kml>
 ''';
     try {
-      int kmlResourceId = await channel.invokeMethod('map#addKML',kml);
+      int kmlResourceId = await channel.invokeMethod('map#addKML', kml);
 
       var c = kmlchannel.invokeMethod("map#addKML", <String, dynamic>{
         'resourceId': kmlResourceId,
@@ -304,14 +367,16 @@ class _DashboardState extends State<Dashboard> {
       print('addKml done${c}');
     } on PlatformException catch (e) {
       throw 'Unable to plot map: ${e.message}';
-    }catch(e){
+    } catch (e) {
       print("error");
       throw 'Unable to plot map${e}';
     }
   }
 
-  void setNewData() async {
+  /*void setNewData() async {
     await Future.delayed(Duration(seconds: 3));
-    dataHandler.setNewPolygons!([[LatLng(25, -90),LatLng(26, 80),LatLng(23, 85)]]);
-  }
+    dataHandler.setNewPolygons!([
+      [LatLng(25, -90), LatLng(26, 80), LatLng(23, 85)]
+    ]);
+  }*/
 }
