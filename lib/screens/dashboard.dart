@@ -135,6 +135,7 @@ class _DashboardState extends State<Dashboard> {
               onTap: () {
                 setState(() {
                   i = 0;
+                  _isRightSidebarOpen = true;
                 });
                 removeKML(_mapController);
                 // Update the state of the app.
@@ -142,19 +143,17 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             ListTile(
-              // leading: const Icon(
-              //   Icons.track_changes,
-              //   color: MyColors.primary,
-              // ),
-              leading: const Icon(
-                Icons.track_changes,
-                color: MyColors.primary,
+              leading: Image.asset(
+                "assets/visualization_icon.png",
+                width: 20,
+                height: 20,
               ),
               title: const Text('Vessel tracking'),
               onTap: () {
                 // Update the state of the app.
                 setState(() {
                   i = 1;
+                  _isRightSidebarOpen = true;
                 });
                 removeKML(_mapController);
                 Navigator.pop(context);
@@ -170,6 +169,7 @@ class _DashboardState extends State<Dashboard> {
                 // Update the state of the app.
                 setState(() {
                   i = 2;
+                  _isRightSidebarOpen = true;
                 });
                 removeKML(_mapController);
                 Navigator.pop(context);
@@ -184,6 +184,7 @@ class _DashboardState extends State<Dashboard> {
               onTap: () {
                 setState(() {
                   i = 3;
+                  _isRightSidebarOpen = true;
                 });
                 addKml(_mapController);
                 // Update the state of the app.
@@ -193,6 +194,7 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           Row(
@@ -260,7 +262,7 @@ class _DashboardState extends State<Dashboard> {
             padding:
                 const EdgeInsets.symmetric(vertical: 25.0, horizontal: 100.0),
             child: Align(
-              alignment: Alignment.bottomRight,
+              alignment: Alignment.bottomLeft,
               child: Container(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
