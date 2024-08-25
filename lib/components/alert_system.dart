@@ -18,8 +18,8 @@ class _AlertSystemState extends State<AlertSystem> {
   @override
   Widget build(BuildContext context) {
     final pastCollisions = [
-      {'date': '.....', 'location': 'Gulf Of Mexico', 'details': 'Collision with vessel X'},
-      {'date': '2024-07-20', 'location': '.....', 'details': 'Collision with vessel Y'},
+      {'date': '2024-08-23', 'location': 'Gulf Of Mexico', 'latitude': '25.56 N','longitude':'90.50 W'},
+      {'date': '2024-07-20', 'location': 'Gulf of Mexico', 'latitude': '27.55 N','longitude':'90.16 W'},
     ];
 
     final upcomingCollisions = [
@@ -47,7 +47,7 @@ class _AlertSystemState extends State<AlertSystem> {
           children: [
             Center(
               child: const Text(
-                'Past Collisions',
+                'Past Oil Spills',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
@@ -66,7 +66,8 @@ class _AlertSystemState extends State<AlertSystem> {
                         children: [
                           Text('Date: ${collision['date']}'),
                           Text('Location: ${collision['location']}'),
-                          Text('Details: ${collision['details']}'),
+                          Text('Latitude: ${collision['latitude']}'),
+                          Text('Longitude: ${collision['longitude']}'),
                         ],
                       ),
                     ),
@@ -75,35 +76,35 @@ class _AlertSystemState extends State<AlertSystem> {
               ),
             ),
             const SizedBox(height: 20),
-            Center(
-              child: const Text(
-                'Upcoming Collisions',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: upcomingCollisions.length,
-                itemBuilder: (context, index) {
-                  final collision = upcomingCollisions[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Date: ${collision['date']}'),
-                          Text('Location: ${collision['location']}'),
-                          Text('Details: ${collision['details']}'),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            // Center(
+            //   child: const Text(
+            //     'Upcoming Collisions',
+            //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemCount: upcomingCollisions.length,
+            //     itemBuilder: (context, index) {
+            //       final collision = upcomingCollisions[index];
+            //       return Card(
+            //         margin: const EdgeInsets.symmetric(vertical: 5),
+            //         child: Padding(
+            //           padding: const EdgeInsets.all(8.0),
+            //           child: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Text('Date: ${collision['date']}'),
+            //               Text('Location: ${collision['location']}'),
+            //               Text('Details: ${collision['details']}'),
+            //             ],
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),
